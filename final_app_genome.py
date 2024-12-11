@@ -1,3 +1,4 @@
+from final_app_common import *
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -18,7 +19,10 @@ exclude_t = ["Unknown","nan","T4d","T2b","T3a","T2a"]
 
 
 
-def genome_dashboard(clusterdata):
+def genome_dashboard():
+    tabs()
+    clusterdata = load_data('genome_cluster')
+    st.sidebar.title("Filters")
     # Gene filter (no exclusion here)
     unique_genes = sorted(clusterdata['Gene'].unique())
     selected_genes = st.sidebar.multiselect("Select Genes:", options=unique_genes, default=[])
@@ -161,17 +165,17 @@ def genome_dashboard(clusterdata):
         st.write("No data available for the selected filters.")
 
     st.markdown(
-    """
-    <div style="display: flex; align-items: center;">
-        <h3 style="margin: 0;">Average Gene Expression Across Pathologic N Stages</h3>
-        <div style="margin-left: 10px;" class="tooltip">ℹ️
-            <span class="tooltiptext">
-                AJCC Pathologic N stage indicates the extent of regional lymph node involvement. N followed by a number 0 to 3 indicates whether the cancer has spread to lymph nodes near the breast and, if so, how many lymph nodes are involved. As the value of the number after the N increases, so does the tumor size and spread.
-            </span>
+        """
+        <div style="display: flex; align-items: center;">
+            <h3 style="margin: 0;">Average Gene Expression Across Pathologic N Stages</h3>
+            <div style="margin-left: 10px;" class="tooltip">ℹ️
+                <span class="tooltiptext">
+                    AJCC Pathologic N stage indicates the extent of regional lymph node involvement. N followed by a number 0 to 3 indicates whether the cancer has spread to lymph nodes near the breast and, if so, how many lymph nodes are involved. As the value of the number after the N increases, so does the tumor size and spread.
+                </span>
+            </div>
         </div>
-    </div>
-    """,
-    unsafe_allow_html=True
+        """,
+        unsafe_allow_html=True
     )
     if not aggregated_data.empty and 'ajcc_pathologic_n' in aggregated_data.columns:
         if not aggregated_data.empty:
@@ -220,16 +224,49 @@ def genome_dashboard(clusterdata):
         st.write("No data available for the selected filters.")
 
     st.markdown(
-    """
-    <div style="display: flex; align-items: center;">
-        <h3 style="margin: 0;">Average Gene Expression Across Pathologic T Stages</h3>
-        <div style="margin-left: 10px;" class="tooltip">ℹ️
-            <span class="tooltiptext">
-                AJCC Pathologic T stage indicates the size and extent of the primary tumor. T followed by a number 0 to 4 describes the primary tumor’s size and if it has spread to the skin or to the chest wall under the breast. As the value of the number after the T increases, so does the tumor size and spread.
-            </span>
+        """
+        <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 24px; /* Size of the ℹ️ button */
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px; /* Increased width to fit larger text */
+            background-color: #555;
+            color: #fff;
+            text-align: left; /* Left-align the text */
+            border-radius: 6px;
+            padding: 10px; /* Increased padding for better text spacing */
+            font-size: 12px; /* Font size for the text inside */
+            line-height: 1.4; /* Line height to reduce space between lines */
+            white-space: normal; /* Ensures long text breaks properly */
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the icon */
+            left: 50%;
+            margin-left: -150px; /* Center the tooltip relative to its parent */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        </style>
+        <div style="display: flex; align-items: center;">
+            <h3 style="margin: 0;">Average Gene Expression Across Pathologic T Stages</h3>
+            <div style="margin-left: 10px;" class="tooltip">ℹ️
+                <span class="tooltiptext">
+                    AJCC Pathologic T stage indicates the size and extent of the primary tumor. T followed by a number 0 to 4 describes the primary tumor’s size and if it has spread to the skin or to the chest wall under the breast. As the value of the number after the T increases, so does the tumor size and spread.
+                </span>
+            </div>
         </div>
-    </div>
-    """,
+        """,
     unsafe_allow_html=True
     )
     if not aggregated_data.empty and 'ajcc_pathologic_t' in aggregated_data.columns:

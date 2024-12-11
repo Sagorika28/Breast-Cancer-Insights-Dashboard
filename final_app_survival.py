@@ -35,7 +35,7 @@ tumor_site_options = [
     'Upper-outer quadrant'
     ]
 
-stage_options= ['I', 'II', 'III', 'IV', 'Unknown']
+stage_options= ['I', 'II', 'III', 'IV',]
 
 @st.cache_data()
 def load_data(path):
@@ -58,6 +58,8 @@ def survival_dashboard():
     st.sidebar.title("Filters")
     print(st.session_state.active_tab)
     year_range = st.sidebar.slider("Year Range", min_value=min_year, max_value=max_year, value=(min_year, max_year))
+    st.sidebar.markdown("<br>", unsafe_allow_html=True)
+    st.sidebar.markdown("Filters for Demographics, Tumor Characteristics & Survival Analysis")
     age_groups_selected = st.sidebar.multiselect("Age Groups", age_group_options)
     tumor_sites_selected = st.sidebar.multiselect("Tumor Site", tumor_site_options)
     stage_selected = st.sidebar.multiselect("Stage", stage_options)
@@ -254,7 +256,7 @@ def survival_dashboard():
         gap, _ = st.columns([0.4, 0.6])
         with gap:
             chart_col = st.selectbox(
-                "Survial Curve by:",
+                "Survival Curve by:",
                 ['Time (months)', 'Race/Ethnicity', 'Marital Status', 'Stage', 'Laterality', 'Tumor Site', 
                 'Tumor Size', 'ER Status', 'PR Status'],
                 help=""
