@@ -6,7 +6,6 @@ aioitertools
 aiosignal
 alabaster
 altair==4.2.2
-anaconda-client
 anyio
 appdirs==1.4.4
 argon2-cffi
